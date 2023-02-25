@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 export default function AddProduct() {
     const initialState = {
@@ -14,12 +14,20 @@ export default function AddProduct() {
 
     const { name, description, price, isPublic } = formData
 
-    const onChange = (e) => {
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        // console.log('Event: ')
+        // console.log(e.target.value)
         setFormData((prevState) => ({
             ...prevState,
             [e.target.name]: e.target.value,
         }))
     }
+
+    useEffect(() => {
+        if (formData) {
+            console.log(formData)
+        }
+    }, [formData])
 
     return (
         <form>
