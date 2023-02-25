@@ -1,7 +1,9 @@
+import AddProduct from './components/AddProduct'
+
 export default function Home() {
     return (
         <main>
-            <h1>D&J's Finds</h1>
+            <AddProduct />
         </main>
     )
 }
