@@ -1,3 +1,5 @@
+const path = require('path')
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     experimental: {
@@ -5,6 +7,9 @@ const nextConfig = {
     },
     images: {
         domains: ['lh3.googleusercontent.com'],
+    },
+    sassOptions: {
+        includePaths: [path.join(__dirname, 'styles')],
     },
 }
 

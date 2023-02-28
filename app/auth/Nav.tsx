@@ -8,9 +8,9 @@ export default async function Nav() {
     const session = await getServerSession(authOptions)
 
     return (
-        <nav className="flex justify-between items-center py-8">
+        <nav className="flex justify-between items-center px-2 py-4 max-w-[1280px] mx-auto bg-[#B7361A]">
             <Link href={'/'}>
-                <h1 className="font-bold text-lg">D&J</h1>
+                <h1 className="font-bold text-2xl text-white">D&J</h1>
             </Link>
 
             <ul className="flex items-center gap-6">

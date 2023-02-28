@@ -1,6 +1,7 @@
-import './globals.css'
+import './globals.scss'
 import Nav from './auth/Nav'
 import { Roboto } from '@next/font/google'
+import QueryWrapper from './auth/QueryWrapper'
 
 const roboto = Roboto({
     subsets: ['latin'],
@@ -16,11 +17,11 @@ export default function RootLayout({ children }) {
         head.tsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
       */}
             <head />
-            <body
-                className={`mx-4 md:mx-48 xl:mx-96 bg-gray-200 ${roboto.variable}`}
-            >
-                <Nav />
-                {children}
+            <body>
+                <QueryWrapper>
+                    <Nav />
+                    {children}
+                </QueryWrapper>
             </body>
         </html>
     )

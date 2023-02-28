@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import '../styles/colors.scss';
 
 :root {
     --max-width: 1100px;
@@ -95,6 +96,18 @@ body {
 a {
     color: inherit;
     text-decoration: none;
+}
+
+.button-primary {
+    background-color: $primary;
+    padding: 4pt 14pt;
+    color: white;
+    border-radius: 6pt;
+    transition: all 0.25s;
+}
+.button-primary:hover {
+    background-color: $primary-lighter;
+    transition: all 0.25s;
 }
 
 /* @media (prefers-color-scheme: dark) {

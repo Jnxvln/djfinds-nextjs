@@ -1,8 +1,8 @@
-import AddProduct from './components/AddProduct'
+import AddProduct from './components/AddProduct/AddProduct'
 
 export default function Home() {
     return (
-        <main>
+        <main className="max-w-[1280px] mx-auto">
             <AddProduct />
         </main>
     )
