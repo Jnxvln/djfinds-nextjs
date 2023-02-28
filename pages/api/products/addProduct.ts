@@ -10,8 +10,8 @@ export default async function handler(
     if (req.method === 'POST') {
         const session = await getServerSession(req, res, authOptions)
 
-        if (!session)
-            return res.status(403).json({
+        if (!session || !session.user)
+            return res.status(401).json({
                 message: 'You must be signed in to perform this action',
             })
 
@@ -27,8 +27,14 @@ export default async function handler(
 
         // Get user
         const prismaUser = await prisma.user.findUnique({
-            where: { email: session?.user?.email },
+            where: {
+                email: session.user.email ? session.user.email : undefined,
+            },
         })
+
+        if (!prismaUser) {
+            return res.status(401).json({ error: 'User not found' })
+        }
 
         // Create product
         try {
