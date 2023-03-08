@@ -41,12 +41,19 @@ export default async function handler(
             const result = await prisma.product.create({
                 data: {
                     name: req.body.name,
+                    price: req.body.price,
+                    description: req.body.description,
+                    isPublic:
+                        req.body.isPublic && req.body.isPublic === 'on'
+                            ? true
+                            : false,
                     userId: prismaUser.id,
                 },
             })
 
             res.status(200).json(result)
         } catch (error) {
+            console.error(error)
             res.status(400).json({
                 error: 'Error has occurred while adding a new product',
             })

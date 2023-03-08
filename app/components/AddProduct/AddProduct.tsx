@@ -5,6 +5,7 @@ import axios, { AxiosError } from 'axios'
 import { FormEvent, useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
+import ImageUploader from './ImageUploader/ImageUploader'
 
 export default function AddProduct() {
     const initialState = {
@@ -32,9 +33,14 @@ export default function AddProduct() {
         {
             onError: (error) => {
                 if (error instanceof AxiosError) {
-                    toast.error(error?.response?.data.message, {
-                        id: toastProductId,
-                    })
+                    toast.error(
+                        error?.response?.data.message
+                            ? error?.response?.data.message
+                            : error?.message,
+                        {
+                            id: toastProductId,
+                        }
+                    )
                 }
                 setIsDisabled(false)
             },
@@ -68,6 +74,13 @@ export default function AddProduct() {
         setIsDisabled(true)
         mutate(formData)
     }
+
+    const onImageChosen = (position: number) => {
+        console.log(
+            `[AddProduct.tsx from ImageUploader.tsx] onImageChosen position: ${position}`
+        )
+        // console.log(e)
+    }
     // #endregion
 
     return (
@@ -80,7 +93,10 @@ export default function AddProduct() {
                     <div className={styles.row}>
                         <div className={styles.cell}>
                             <div>
-                                <label>Name: </label>
+                                <label>
+                                    <span className={styles.required}>*</span>
+                                    Name:{' '}
+                                </label>
                             </div>
                         </div>
                         <div className={styles.cell}>
@@ -88,7 +104,7 @@ export default function AddProduct() {
                                 type="text"
                                 name="name"
                                 value={name}
-                                placeholder="Product name"
+                                placeholder="Product name *"
                                 className="p-2 rounded-md w-full"
                                 onChange={onChange}
                             />
@@ -134,6 +150,33 @@ export default function AddProduct() {
                                 rows={4}
                                 onChange={onTextareaChange}
                             ></textarea>
+                        </div>
+                    </div>
+
+                    {/* Image Uploader */}
+                    <div className={styles.row}>
+                        <div className={styles.cell}>
+                            <label>Images: </label>
+                        </div>
+                        <div className={styles.cell}>
+                            <ImageUploader onImageChosen={onImageChosen} />
+                        </div>
+                    </div>
+
+                    {/* Is Public */}
+                    <div className={styles.row}>
+                        <div className={styles.cell}>
+                            <div>
+                                <label htmlFor="">Public:</label>
+                            </div>
+                        </div>
+                        <div className={styles.cell}>
+                            <input
+                                type="checkbox"
+                                name="isPublic"
+                                checked={isPublic}
+                                onChange={onChange}
+                            />
                         </div>
                     </div>
 
