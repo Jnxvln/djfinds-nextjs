@@ -20,7 +20,6 @@ export default function ImageUploader({ onImageChosen }: any) {
         */
 
         console.log('File change event: ')
-        alert('Event')
 
         const data = {
             target: e?.target,

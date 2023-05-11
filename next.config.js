@@ -6,7 +6,10 @@ const nextConfig = {
         appDir: true,
     },
     images: {
-        domains: ['lh3.googleusercontent.com'],
+        domains: [
+            'lh3.googleusercontent.com',
+            'qeeundgfwrhtssanilnc.supabase.co',
+        ],
     },
     sassOptions: {
         includePaths: [path.join(__dirname, 'styles')],

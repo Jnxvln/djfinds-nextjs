@@ -2,12 +2,17 @@
 
 import styles from './AddProduct.module.scss'
 import axios, { AxiosError } from 'axios'
-import { FormEvent, useState } from 'react'
+import Image from 'next/image'
+import { NextApiRequest, NextApiResponse } from 'next'
+import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
-import ImageUploader from './ImageUploader/ImageUploader'
+// import ImageUploader from './ImageUploader/ImageUploader'
+import { supabase } from '@/lib/supabase'
 
 export default function AddProduct() {
+    const queryClient = useQueryClient()
+
     const initialState = {
         name: '',
         description: '',
@@ -15,6 +20,8 @@ export default function AddProduct() {
         isPublic: false,
     }
     const [formData, setFormData] = useState(initialState)
+    const [imageFile, setImageFile] = useState<any>(null)
+    const [imageUrl, setImageUrl] = useState<string>('')
     const [isDisabled, setIsDisabled] = useState(false)
     const { name, description, price, isPublic } = formData
     let toastProductId: string
@@ -68,8 +75,43 @@ export default function AddProduct() {
         }))
     }
 
+    const handleFileSelected = (e) => {
+        setImageFile(e.target.files[0])
+    }
+
     const onSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
+
+        const filename = `${imageFile.name}-${Date.now()}`
+
+        console.log('Image filename to use: ', filename)
+
+        const { data, error } = await supabase.storage
+            .from('images')
+            .upload(filename, imageFile, {
+                cacheControl: '3600',
+                upsert: false,
+            })
+
+        if (error) {
+            console.log('ERROR UPLOADING IMAGE: ')
+            console.log(error)
+        }
+
+        console.log('Image upload data: ')
+        console.log(data)
+
+        const filepath = data?.path
+
+        console.log('Filepath: ', filepath)
+        // setImageUrl(filepath ? filepath : '')
+        // save filepath in database
+
+        const publicImagePath = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/${filepath}`
+
+        console.log('Public filepath: ', publicImagePath)
+        setImageUrl(publicImagePath ?? '')
+
         toastProductId = toast.loading('Creating product...')
         setIsDisabled(true)
         mutate(formData)
@@ -81,6 +123,7 @@ export default function AddProduct() {
         )
         // console.log(e)
     }
+
     // #endregion
 
     return (
@@ -159,7 +202,22 @@ export default function AddProduct() {
                             <label>Images: </label>
                         </div>
                         <div className={styles.cell}>
-                            <ImageUploader onImageChosen={onImageChosen} />
+                            {/* <ImageUploader onImageChosen={onImageChosen} /> */}
+                            <input
+                                type="file"
+                                name="image"
+                                onChange={handleFileSelected}
+                            />
+                            {imageUrl && (
+                                <div>
+                                    <Image
+                                        src={imageUrl}
+                                        alt="Uploaded"
+                                        width={300}
+                                        height={300}
+                                    />
+                                </div>
+                            )}
                         </div>
                     </div>
 
@@ -180,6 +238,7 @@ export default function AddProduct() {
                         </div>
                     </div>
 
+                    {/* Submit */}
                     <div className={styles.row}>
                         <div className={styles.cell}></div>
                         <div className={styles.cell}>
